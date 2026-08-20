@@ -1,0 +1,24 @@
+/*
+ * Custom device tree for the i.MX8MP EVK with a Summit/Ezurio
+ * Sterling LWB5+ (CYW4373A0) M.2 module in the SDIO M.2 slot.
+ *
+ * Based on NXP's imx8mp-evk-usdhc1-m2.dts (enables the M.2 SDIO
+ * wireless slot on usdhc1) and overrides the Bluetooth HCI node on
+ * uart1 so that the Summit backports brcm/hci_uart driver binds to
+ * the LWB5+ CYW4373A0 BT instead of the (wrong) NXP 88W8997.
+ *
+ * SPDX-License-Identifier: (GPL-2.0 OR MIT)
+ */
+/dts-v1/;
+
+#include "imx8mp-evk-usdhc1-m2.dts"
+
+/* Bluetooth is on UART1. The LWB5+ is a Broadcom/Cypress CYW4373A0,
+ * so declare the matching compatible so hci_uart/btbcm bind and load
+ * the BCM4373A0*.hcd firmware.
+ */
+&uart1 {
+	bluetooth {
+		compatible = "cypress,cyw4373a0-bt";
+	};
+};
